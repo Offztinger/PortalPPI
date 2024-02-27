@@ -65,6 +65,7 @@
   },
   "prisma": {
     "schema": "./src/core/database/prisma/schema.prisma",
-    "seed": "ts-node ./src/core/database/prisma/seed.ts"
+    "seed": "ts-node ./src/core/database/prisma/seed.ts",
+    "migrate": "prisma migrate dev"
   }
 }

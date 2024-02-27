@@ -1,7 +1,7 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 // How to make a migration on prisma: yarn prisma migrate dev --name ${name} 
-
+// How to run all migrations: yarn prisma migrate
 
 generator client {
   provider = "prisma-client-js"

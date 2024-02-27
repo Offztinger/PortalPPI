@@ -4,7 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import fmp from '@fastify/multipart';
 import helmet from 'helmet';
-
+import configurations from './core/config/configurations';
 import { Environments } from './core/interfaces';
 import { AppModule } from './app.module';
 
@@ -44,8 +44,9 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }));
 
   app.enableCors();
-
-  await app.listen(3080, '0.0.0.0');
+  const env = configurations();
+  const backendPort = env.backendPort;
+  await app.listen(backendPort, '0.0.0.0');
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
