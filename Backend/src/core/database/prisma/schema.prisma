@@ -3,6 +3,10 @@
 // How to make a migration on prisma: yarn prisma migrate dev --name ${name} 
 // How to run all migrations: yarn prisma migrate
 
+// createdAt      DateTime @default(now()) @map("created_at")
+// updatedAt      DateTime @default(now()) @updatedAt @map("updated_at")
+// deletedAt      DateTime? @map("deleted_at")
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,10 +17,88 @@ datasource db {
 }
 
 model User {
-  id             String @id @default(uuid())
-  documentNumber Int    @unique @map("document_number")
-  email          String @unique
+  id             String        @id @default(uuid()) @map("id_user")
+  documentNumber Int           @unique @map("document_number")
+  email          String        @unique
   password       String
+  firstName      String        @map("first_name")
+  secondName     String        @map("second_name")
+  thirdName      String        @map("third_name")
+  firstLastName  String        @map("first_last_name")
+  secondLastName String        @map("second_last_name")
+  idRole         String        @map("id_role")
+  role           Roles         @relation(fields: [idRole], references: [id])
+  course         Course[]
+  teamMembers    TeamMembers[]
 
   @@map("users")
 }
+
+model Roles {
+  id              String @id @default(uuid()) @map("id_role")
+  roleName        String @unique @map("role_name")
+  roleDescription String @map("role_description")
+  user            User[]
+
+  @@map("roles")
+}
+
+model Course {
+  id                String        @id @default(uuid()) @map("id_course")
+  courseName        String        @unique @map("course_name")
+  courseDescription String        @map("course_description")
+  idProfessor       String        @map("id_professor")
+  user              User          @relation(fields: [idProfessor], references: [id])
+  teamMembers       TeamMembers[]
+  teamPPI           TeamPPI[]
+
+  @@map("courses")
+}
+
+model TeamMembers {
+  id             String  @id @default(uuid()) @map("id_team_member")
+  folderNumber   Int     @unique @map("folder_number")
+  idCourse       String  @map("id_course")
+  idUser         String  @map("id_user")
+  memberSemester String  @map("team_semester")
+  user           User    @relation(fields: [idUser], references: [id])
+  course         Course  @relation(fields: [idCourse], references: [id])
+  teamPPI        TeamPPI @relation(fields: [folderNumber], references: [folderNumber])
+
+  @@map("team_members")
+}
+
+model TeamPPI {
+  id           String        @id @default(uuid()) @map("id_team_ppi")
+  folderNumber Int           @unique @map("folder_number")
+  teamName     String        @map("team_name")
+  idCourse     String        @map("id_course")
+  teamSemester String        @map("team_semester")
+  course       Course        @relation(fields: [idCourse], references: [id])
+  TeamMembers  TeamMembers[]
+
+  @@map("team_ppi")
+}
+
+model Consultant {
+  id              String @default(uuid()) @map("id_consultant")
+  folderNumber    Int    @unique @map("folder_number")
+  idProfessor     String @map("id_professor")
+  consultantDay   String @map("consultant_day")
+  consultantMonth String @map("consultant_month")
+  consultantYear  String @map("consultant_year")
+  consultantPlace String @map("consultant_place")
+  consultantHour  String @map("consultant_hour")
+  teamSemester    String @map("semester")
+
+  @@map("consultants")
+}
+
+// model UserProfile {
+//   id              String @default(uuid())
+//   user_id         Int    @map("user_id")
+//   user_id_profile Int    @map("user_id_profile")
+
+//   @@id([user_id, user_id_profile])
+//   @@map("user_profiles")
+// }
