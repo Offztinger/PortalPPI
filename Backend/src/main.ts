@@ -33,8 +33,8 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('Proyecto base')
-    .setDescription('Proyecto base API description')
+    .setTitle('Portal PPI Endpoints')
+    .setDescription('Endpoint construidos para el proyecto')
     .setVersion('1.0')
     .build();
 

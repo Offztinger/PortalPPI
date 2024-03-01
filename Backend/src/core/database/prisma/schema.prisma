@@ -57,7 +57,7 @@ model Course {
 
 model TeamMembers {
   id             String  @id @default(uuid()) @map("id_team_member")
-  folderNumber   Int     @unique @map("folder_number")
+  folderNumber   Int     @map("folder_number")
   idCourse       String  @map("id_course")
   idUser         String  @map("id_user")
   memberSemester String  @map("team_semester")
