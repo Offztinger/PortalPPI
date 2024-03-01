@@ -6,42 +6,40 @@ import { hashPassword } from "src/utils";
 
 
 @Injectable()
-export class StudentService {
+export class ProfessorService {
   constructor(private prisma: PrismaService) { }
 
-  async createStudent(data: UserDTO) {
+  async createProfessor(data: UserDTO) {
     return this.prisma.user.create({
-      data: {
-        ...data,
-        password: hashPassword(data.password),
-      },
+      data,
     });
   }
 
-  async findAllStudents() {
+  async findAllProfessors() {
     return this.prisma.user.findMany({
       where: {
         role: {
-          roleName: "Estudiante",
+          roleName: "Profesor",
         }
       },
     });
   }
 
-  async findStudentById(id: string) {
+  async findProfessorById(id: string) {
 
-    const studentById = await this.prisma.user.findFirst({
-      where: { id, role: { roleName: Roles.STUDENT }, }
+    const professorById = await this.prisma.user.findFirst({
+      where: { id, role: { roleName: Roles.PROFESSOR }, }
     });
 
-    if (!studentById) {
+    if (!professorById) {
       throw new NotFoundException("No hay ningun estudiante con ese id");
     }
+    return professorById;
 
-    return studentById;
+
   }
 
-  async updateStudent(id: string, data: UserDTO) {
+  async updateProfessor(id: string, data: UserDTO) {
     return this.prisma.user.update({
       where: { id },
       data: {
@@ -51,7 +49,7 @@ export class StudentService {
     });
   }
 
-  async deleteStudent(id: string) {
+  async deleteProfessor(id: string) {
     return this.prisma.user.delete({
       where: { id },
     });

@@ -4,44 +4,41 @@ import { UserDTO } from "src/dto/UserDTO";
 import { Roles } from "src/roles/constants/roles.constants";
 import { hashPassword } from "src/utils";
 
-
 @Injectable()
-export class StudentService {
+export class CounselorService {
   constructor(private prisma: PrismaService) { }
 
-  async createStudent(data: UserDTO) {
+  async createCounselor(data: UserDTO) {
     return this.prisma.user.create({
-      data: {
-        ...data,
-        password: hashPassword(data.password),
-      },
+      data,
     });
   }
 
-  async findAllStudents() {
+  async findAllCounselors() {
     return this.prisma.user.findMany({
       where: {
         role: {
-          roleName: "Estudiante",
+          roleName: "Asesor",
         }
       },
     });
   }
 
-  async findStudentById(id: string) {
+  async findCounselorById(id: string) {
 
-    const studentById = await this.prisma.user.findFirst({
-      where: { id, role: { roleName: Roles.STUDENT }, }
+    const counselorById = await this.prisma.user.findFirst({
+      where: { id, role: { roleName: Roles.COUNSELOR }, }
     });
 
-    if (!studentById) {
+    if (!counselorById) {
       throw new NotFoundException("No hay ningun estudiante con ese id");
     }
 
-    return studentById;
+    return counselorById;
+
   }
 
-  async updateStudent(id: string, data: UserDTO) {
+  async updateCounselor(id: string, data: UserDTO) {
     return this.prisma.user.update({
       where: { id },
       data: {
@@ -51,7 +48,7 @@ export class StudentService {
     });
   }
 
-  async deleteStudent(id: string) {
+  async deleteCounselor(id: string) {
     return this.prisma.user.delete({
       where: { id },
     });

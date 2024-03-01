@@ -2,6 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 // How to make a migration on prisma: yarn prisma migrate dev --name ${name} 
 // How to run all migrations: yarn prisma migrate
+// Generate the new schema: yarn prisma generate
 
 // createdAt      DateTime @default(now()) @map("created_at")
 // updatedAt      DateTime @default(now()) @updatedAt @map("updated_at")
@@ -30,6 +31,7 @@ model User {
   role           Roles         @relation(fields: [idRole], references: [id])
   course         Course[]
   teamMembers    TeamMembers[]
+  Schedule       Schedule[]
 
   @@map("users")
 }
@@ -76,22 +78,24 @@ model TeamPPI {
   teamSemester String        @map("team_semester")
   course       Course        @relation(fields: [idCourse], references: [id])
   TeamMembers  TeamMembers[]
+  Schedule     Schedule?
 
   @@map("team_ppi")
 }
 
-model Consultant {
-  id              String @default(uuid()) @map("id_consultant")
-  folderNumber    Int    @unique @map("folder_number")
-  idProfessor     String @map("id_professor")
-  consultantDay   String @map("consultant_day")
-  consultantMonth String @map("consultant_month")
-  consultantYear  String @map("consultant_year")
-  consultantPlace String @map("consultant_place")
-  consultantHour  String @map("consultant_hour")
-  teamSemester    String @map("semester")
+model Schedule {
+  id            String  @id @default(uuid()) @map("id_schedule")
+  folderNumber  Int     @unique @map("folder_number")
+  idProfessor   String  @map("id_professor")
+  scheduleDay   String  @map("schedule_day")
+  scheduleMonth String  @map("schedule_month")
+  scheduleYear  String  @map("schedule_year")
+  schedulePlace String  @map("schedule_place")
+  scheduleHour  String  @map("schedule_hour")
+  teamPPI       TeamPPI @relation(fields: [folderNumber], references: [folderNumber])
+  user          User    @relation(fields: [idProfessor], references: [id])
 
-  @@map("consultants")
+  @@map("schedule")
 }
 
 // model UserProfile {
